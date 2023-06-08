@@ -2,9 +2,42 @@ import datetime
 import cv2
 import numpy as np
 
+# Capture Video with Audio: high frame rates, MJPG 15fps@3264 x 2448, 30fps@1080P; YUY2 30fps@640x 480; audio, single microphone (optional dual channel).
+
 cap=cv2.VideoCapture(0)
-cap.set(3,640)
-cap.set(4,480)
+
+# cap=cv2.VideoCapture(1, cv2.CAP_OPENCV_MJPEG)
+
+
+
+
+if not cap.isOpened():
+    print("Cannot open camera")
+    exit()
+
+# setting camera parameters
+# https://docs.opencv.org/4.x/d4/d15/group__videoio__flags__base.html#ggaeb8dd9c89c10a5c63c139bf7c4f5704dab26d2ba37086662261148e9fe93eecad
+
+# cap.set(3,640)
+# cap.set(4,480)
+
+cap.set(cv2.CAP_PROP_FRAME_WIDTH,1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT,1080)
+
+# cap.set(cv2.CAP_PROP_FPS,5)
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,3264)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,2448)
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,2000)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,1000)
+
+
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,3264)
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH,2448)
+
+
 
 classNames=[]
 classFile='coco.names'
@@ -17,11 +50,12 @@ weightsPath = 'frozen_inference_graph.pb'
 
 #pre set parameters
 net = cv2.dnn_DetectionModel(weightsPath,configPath)
-net.setInputSize(320,320)
+# net.setInputSize(320,320)
+net.setInputSize(640,640)
 net.setInputScale(1.0/127.5)
 net.setInputMean((127.5,127.5,127.5))
 net.setInputSwapRB(True)
-thres=0.6
+thres=0.5
 nms_threshold=0.2   #(lower,more suppress)
 
 # Maintain accumulation of thresholded differences.
@@ -37,11 +71,15 @@ objectsToDetect = ["car", "truck", "motorcycle"]
 #detection
 while True:
     _,img=cap.read()
+    
+    # if img is None:
+    #     break
+
     original_img =img.copy()
 
     # Convert to grayscale and equalize.
     grayscale_img= cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    grayscale_img = cv2.equalizeHist(grayscale_img)
+    # grayscale_img = cv2.equalizeHist(grayscale_img)
 
     img = cv2.merge((grayscale_img,grayscale_img,grayscale_img))
 
