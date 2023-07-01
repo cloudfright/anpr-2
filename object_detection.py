@@ -69,7 +69,7 @@ while True:
     # Compute difference.
     image_diff = cv2.absdiff(image_acc.astype(img.dtype),img)
 
-    # cv2.imshow("diff",image_diff)
+    cv2.imshow("diff",image_diff)
 
     # Accumulate.
     cv2.accumulateWeighted(img,image_acc,alpha)
@@ -91,10 +91,10 @@ while True:
         
         objClass = classNames[classIds[i] - 1]
         # show the bounding box and label, and conditional probability on the output image
-        # text = "{}: {:.4f}".format(objClass, confs[i]) 
+        text = "{}: {:.4f}".format(objClass, confs[i]) 
 
-        # cv2.putText(img, text, (box[0] + 10, box[1] + 30),
-        #                cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,0),2)
+        cv2.putText(img, text, (box[0] + 10, box[1] + 30),
+                       cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,255,0),2)
 
         # Extract the region of interest
         roi = image_diff[y:y+h, x:x+w]
@@ -107,7 +107,7 @@ while True:
             cv2.imwrite("images-to-label/%s.jpg" % now.strftime("%Y-%m-%d-%H-%M-%S-%f"), img)
             # print("Movement: %s, Index: %d, class %s, brightness %d" % (datetime.datetime.now(), i, text, average_brightness))
 
-    # cv2.imshow("output",img)
+    cv2.imshow("output",img)
     cv2.waitKey(1)
 
 # 
