@@ -104,7 +104,7 @@ while True:
 
         if (average_brightness > 10 and objClass in objectsToDetect):
             now = datetime.datetime.now()
-            cv2.imwrite("images-to-label/%s.jpg" % now.strftime("%Y-%m-%d-%H-%M-%S-%f"), img)
+            # cv2.imwrite("images-to-label/%s.jpg" % now.strftime("%Y-%m-%d-%H-%M-%S-%f"), img)
             # print("Movement: %s, Index: %d, class %s, brightness %d" % (datetime.datetime.now(), i, text, average_brightness))
 
     cv2.imshow("output",img)
