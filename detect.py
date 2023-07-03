@@ -36,7 +36,7 @@ class ObjectDetector(object):
         self.image_acc = None  
 
     
-    def detect_objects(self,frame):
+    def detect_objects(self,frame): 
 
         if self.image_acc is None:
             self.image_acc = np.empty(np.shape(frame))
@@ -58,7 +58,7 @@ class ObjectDetector(object):
          # Accumulate.
         cv2.accumulateWeighted(frame,self.image_acc,self.alpha)
 
-        files = list()
+        filename = None
         for i in indices:
             box=bbox[i]
             x,y,w,h = box[0],box[1],box[2],box[3]
@@ -77,11 +77,11 @@ class ObjectDetector(object):
                 now = datetime.datetime.now()
                 object_frame = frame[y:y+h,x:x+w]
                 filename = "images/capture/%s.jpg" % now.strftime("%Y-%m-%d-%H-%M-%S-%f")
-                files.append(filename)
                 cv2.imwrite(filename, object_frame)
                 logging.debug("Movement: %s, Index: %d, class %s, brightness %d" % (datetime.datetime.now(), i, text, average_brightness))
 
-        return tuple(files)
+        return filename
+    
 
 # thres=0.6
 # nms_threshold=0.2   #(lower,more suppress)

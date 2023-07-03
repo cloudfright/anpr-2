@@ -2,6 +2,7 @@ import cv2
 import logging
 import time
 import easyocr
+import datetime
 
 
 class PlateReader(object):
@@ -22,14 +23,21 @@ class PlateReader(object):
       #   processed_img = cv2.bitwise_not(thr)
       # cv2.imshow('for ocr', processed_img)
 
+      logging.info(f"Plate READER - Reading plate -  files: {filenames}")     
+
       for filename in filenames:
-        logging.info(f"Plate READER - Reading plate from {filename}")
+        logging.debug(f"Plate READER - Reading plate from {filename}")
         frame = cv2.imread(filename)
+        if frame is None:
+          logging.error(f"Plate READER - Could not read file {filename}")
         result = self.reader.readtext(frame)
-      
+        logging.debug(f"Plate READER - OCR result: {result}")
+
         for (bbox, text, prob) in result:
-          # if (float(prob) > 0.01):
-          logging.info("%s %f" % (self.cleanup_text(text), prob))
+          if (float(prob) > 0.3):
+            logging.info(f"OCR = {self.cleanup_text(text)} prob:{prob} time:{datetime.datetime.now.strftime('%Y-%m-%d %H:%M:%S')}")
+          else:
+            logging.info("not confident enough to read plate")
          
     def cleanup_text(self,text):
 	    # strip out non-ASCII text 
