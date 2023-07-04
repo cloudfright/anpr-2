@@ -8,6 +8,7 @@ import datetime
 class PlateReader(object):
     def __init__(self):
         self.reader = easyocr.Reader(['en'], gpu=True)
+        self.allowed_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         pass        
     
 
@@ -23,21 +24,29 @@ class PlateReader(object):
       #   processed_img = cv2.bitwise_not(thr)
       # cv2.imshow('for ocr', processed_img)
 
-      logging.info(f"Plate READER - Reading plate -  files: {filenames}")     
+      # logging.info(f"Plate READER - Reading plate -  files: {filenames}")     
+
+      results = []
 
       for filename in filenames:
         logging.debug(f"Plate READER - Reading plate from {filename}")
         frame = cv2.imread(filename)
         if frame is None:
           logging.error(f"Plate READER - Could not read file {filename}")
-        result = self.reader.readtext(frame)
-        logging.debug(f"Plate READER - OCR result: {result}")
+        result = self.reader.readtext(frame, allowlist=self.allowed_chars)
+        # logging.debug(f"Plate READER - OCR result: {result}")
 
         for (bbox, text, prob) in result:
-          if (float(prob) > 0.3):
-            logging.info(f"OCR = {self.cleanup_text(text)} prob:{prob} time:{datetime.datetime.now.strftime('%Y-%m-%d %H:%M:%S')}")
-          else:
-            logging.info("not confident enough to read plate")
+          results.append((datetime.datetime.now(), filename, text, prob))
+          # if (float(prob) > 0.3):
+          #   logging.info(f"OCR = {self.cleanup_text(text)} prob:{prob} time:{datetime.datetime.now.strftime('%Y-%m-%d %H:%M:%S')}")
+          # else:
+          #   logging.info("not confident enough to read plate")
+
+        results.sort(key=lambda tup: tup[3], reverse=True)
+        for result in results:
+           logging.debug(result)
+        # logging.debug(f"Plate READER - OCR results: {results}")   
          
     def cleanup_text(self,text):
 	    # strip out non-ASCII text 
