@@ -1,6 +1,7 @@
 # output directory
 images-to-label/
 ready-to-label/
+images/
 
 # DS Store files
 .DS_Store
