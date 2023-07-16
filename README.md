@@ -18,7 +18,7 @@ https://github.com/HarshitDolu/Object-Detection-using-COCO-dataset
 - Activate the environment - conda activate <env_name>
 - Intall pip - conda -c conda install pip
 - Install paddlepaddle - pip install paddlepaddle or on MacOS M1 - you'll need to follow [these instructions](https://www.paddlepaddle.org.cn/install/quick? docurl=/documentation/docs/en/install/pip/macos-pip_en.html) to install paddlepaddle
-- pip install paddleocr this installs an older version of opencv (4.6) which lacks some of th DNN performance improvements since 4.7
+- pip install paddleocr this installs an older version of opencv (4.6) which lacks some of the DNN performance improvements since 4.7
 - pip install opencv-python --upgrade
 - pip install opencv-contrib-python --upgrade
 

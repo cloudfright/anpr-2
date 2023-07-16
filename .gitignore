@@ -3,6 +3,9 @@ images-to-label/
 ready-to-label/
 images/
 
+# databases
+data/*.db
+
 # DS Store files
 .DS_Store
 

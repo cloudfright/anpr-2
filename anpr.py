@@ -72,7 +72,6 @@ if __name__ == '__main__':
 
             key = cv2.waitKey(1)
             if key == ord('q'):
-                # cap.release()
                 video_stream.release()
                 cv2.destroyAllWindows()
                 exit(1)
