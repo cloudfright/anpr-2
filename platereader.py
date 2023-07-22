@@ -26,7 +26,9 @@ class PlateReader(object):
                 for idx in range(len(result)):
                     res = result[idx]
                     text, confidence = res[0][1]
-                    results.append((datetime.datetime.now().timestamp(), filename, text, confidence))
+                    if (confidence > 0.75):
+                        # logging.debug(f"OCR result: {text} - {confidence}")
+                        results.append((datetime.datetime.now().timestamp(), filename, text, confidence))
 
 
         if (len(results) > 0):
@@ -34,6 +36,9 @@ class PlateReader(object):
             # sort the results by confidence. descending
             results.sort(key=lambda tup: tup[3], reverse=True)
             
+            for result in results:
+                logging.debug(f"OCR result: {result}")
+
             top_result = results[0]
             timestamp = top_result[0]
             img_filename_capture = top_result[1]
