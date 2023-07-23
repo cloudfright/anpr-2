@@ -1,7 +1,7 @@
 import cv2
 import logging
 import time
-import datetime
+from datetime import datetime
 from paddleocr import PaddleOCR
 from persistence import EventPersistence
 from collections import Counter
@@ -28,7 +28,7 @@ class PlateReader(object):
                     text, confidence = res[0][1]
                     if (confidence > 0.75):
                         # logging.debug(f"OCR result: {text} - {confidence}")
-                        results.append((datetime.datetime.now().timestamp(), filename, text, confidence))
+                        results.append((datetime.now().timestamp(), filename, text, confidence))
 
 
         if (len(results) > 0):

@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 import cv2
 import numpy as np
 import logging
@@ -7,13 +7,13 @@ import logging
 class ObjectDetector(object):
     def __init__(self):
         self.classNames=[]
-        self.classFile='coco.names'
+        self.classFile='./data/model/coco.names'
         with open(self.classFile,'rt') as f:
             self.classNames= f.read().rstrip('\n').split('\n')
 
         #pretrained dnn model
-        self.configPath = 'ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt'
-        self.weightsPath = 'frozen_inference_graph.pb'
+        self.configPath = './data/model/ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt'
+        self.weightsPath = './data/model/frozen_inference_graph.pb'
 
         #pre set parameters
         self.net = cv2.dnn_DetectionModel(self.weightsPath,self.configPath)
@@ -64,11 +64,11 @@ class ObjectDetector(object):
             average_brightness = cv2.mean(roi)[0]
 
             if (average_brightness > 10 and objClass in self.objectsToDetect):
-                now = datetime.datetime.now()
+                now = datetime.now()
                 object_frame = frame[y:y+h,x:x+w]
                 filename = "./images/capture/%s.jpg" % now.strftime("%Y-%m-%d-%H-%M-%S-%f")
                 cv2.imwrite(filename, object_frame)
-                # logging.debug("Movement: %s, Index: %d, class %s, brightness %d" % (datetime.datetime.now(), i, text, average_brightness))
+                # logging.debug("Movement: %s, Index: %d, class %s, brightness %d" % (datetime.now(), i, text, average_brightness))
 
         return filename
     
