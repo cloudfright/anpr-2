@@ -12,8 +12,8 @@ import datetime
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
-    
     picam2 = Picamera2()
+
     prev_frame_time = 0
     new_frame_time = 0
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     try:
         # start the video stream
         Picamera2.set_logging(Picamera2.INFO)
-        config = picam2.create_preview_configuration(main={"format": "BGR888", "size": (1456, 1088)})
+        config = picam2.create_preview_configuration(main={"format": "XBGR8888", "size": (1456, 1088)})
         picam2.start()
 
     except:
@@ -38,25 +38,25 @@ if __name__ == '__main__':
 
     while True:
         try:
-            frame = picam2.get_capture_array()
+            frame = picam2.capture_array()
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             filename = detector.detect_objects(frame)
 
-            if filename:
-                # motion detected 
-                movement_count += 1
-                ocr_queue.append(filename)
-            else:
-                if (movement_count > 0):
-                     movement_count -= 1
-                else:    
-                    # motion ended                   
-                    if len(ocr_queue):
-                        logging.debug("motion ended")
-                        ocr_list_to_process = []
-                        while (len(ocr_queue)):
-                            ocr_list_to_process.append(ocr_queue.popleft())
-                            result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
+            # if filename:
+            #     # motion detected 
+            #     movement_count += 1
+            #     ocr_queue.append(filename)
+            # else:
+            #     if (movement_count > 0):
+            #          movement_count -= 1
+            #     else:    
+            #         # motion ended                   
+            #         if len(ocr_queue):
+            #             logging.debug("motion ended")
+            #             ocr_list_to_process = []
+            #             while (len(ocr_queue)):
+            #                 ocr_list_to_process.append(ocr_queue.popleft())
+            #                 result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
    
 
             new_frame_time = time.time()
@@ -65,6 +65,7 @@ if __name__ == '__main__':
             fps = int(fps)  
             fps = str(fps)
   
+            print(fps)
                 # cv2.putText(frame, fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 3, (100, 255, 0), 3, cv2.LINE_AA)
                 # cv2.imshow('frame', frame)
 
