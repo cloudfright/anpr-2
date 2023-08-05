@@ -27,7 +27,7 @@ TODO: containerise this, but for now the installation process is cumberome and f
 
 ## How it works
 
-Video is captured via the Pi camera. Basic object detection is performed using OpenCVs DNN (this is currently done on the CPU). If movement is detected and is a car, truck or motocycle, write an image to disk. Form a que of image paths to be processed. In a seperate process, OCR the images to extract the number plate or text on the vehicle. Summarise the OCR results based on confidence and frequency, then write the OCR details to a sqlite database. 
+Video is captured via the Pi camera. Basic object detection is performed using OpenCVs DNN (this is currently done on the CPU). If movement is detected and is a car, truck or motocycle, write an image to disk. Form a queue of image paths to be processed. In a seperate process, OCR the images to extract the number plate or text on the vehicle. Summarise the OCR results based on confidence and frequency, then write the OCR details to a sqlite database. Archive the images that have the highest OCR confidence.
 
 IN PROGRESS:
 - Build an API onto the data to get a frequency analysis of plates in a given time period
@@ -35,6 +35,7 @@ IN PROGRESS:
 TODO: 
 - Object detection / infernence using Coral TPU
 - Anomaly detection of plates based around frequency, length of visit and time of day
+- Daily scheduled clean up of captured images
 
 ## Notes
  - Make sure you have a good PSU for the Pi, I opted for the official Rasberry PI 5.1v, 3A PSU, but before I chose this I had many problems with corrupt SD cards due to underpowwered PSUs.
