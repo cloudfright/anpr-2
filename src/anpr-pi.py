@@ -56,7 +56,7 @@ if __name__ == '__main__':
                         ocr_list_to_process = []
                         while (len(ocr_queue)):
                             ocr_list_to_process.append(ocr_queue.popleft())
-                            result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
+                        result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
    
 
             new_frame_time = time.time()
