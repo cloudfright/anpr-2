@@ -2,9 +2,9 @@ import cv2, time
 from collections import deque
 import logging
 from multiprocessing import Process, Manager, Queue
-from detect import ObjectDetector
+from detect_tpu import TpuObjectDetector
 from multiprocessing.pool import ThreadPool
-# from platereader import PlateReader
+from platereader import PlateReader
 from picamera2 import Picamera2
 
 import datetime
@@ -20,8 +20,8 @@ if __name__ == '__main__':
     # create a thread pool to do the ocr processing (leave somme headroom)
     pool = ThreadPool(processes = int(cv2.getNumberOfCPUs() / 2 ))
 
-    detector = ObjectDetector()
-    # plate_reader = PlateReader()
+    detector = TpuObjectDetector()
+    plate_reader = PlateReader()
 
     try:
         # start the video stream
@@ -42,21 +42,21 @@ if __name__ == '__main__':
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             filename = detector.detect_objects(frame)
 
-            # if filename:
-            #     # motion detected 
-            #     movement_count += 1
-            #     ocr_queue.append(filename)
-            # else:
-            #     if (movement_count > 0):
-            #          movement_count -= 1
-            #     else:    
-            #         # motion ended                   
-            #         if len(ocr_queue):
-            #             logging.debug("motion ended")
-            #             ocr_list_to_process = []
-            #             while (len(ocr_queue)):
-            #                 ocr_list_to_process.append(ocr_queue.popleft())
-            #                 result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
+            if filename:
+                # motion detected 
+                movement_count += 1
+                ocr_queue.append(filename)
+            else:
+                if (movement_count > 0):
+                     movement_count -= 1
+                else:    
+                    # motion ended                   
+                    if len(ocr_queue):
+                        logging.debug("motion ended")
+                        ocr_list_to_process = []
+                        while (len(ocr_queue)):
+                            ocr_list_to_process.append(ocr_queue.popleft())
+                            result = pool.apply_async(plate_reader.read_plate, args=([ocr_list_to_process]))
    
 
             new_frame_time = time.time()
@@ -65,7 +65,7 @@ if __name__ == '__main__':
             fps = int(fps)  
             fps = str(fps)
   
-            print(fps)
+            # print(fps)
                 # cv2.putText(frame, fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 3, (100, 255, 0), 3, cv2.LINE_AA)
                 # cv2.imshow('frame', frame)
 
