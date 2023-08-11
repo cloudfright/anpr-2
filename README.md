@@ -16,7 +16,7 @@ Hardware:
  
 TODO: containerise this, but for now the installation process is cumberome and fragile.
 
-1. Install Raspberry PI OS 64-but, Bullseye. I'm using out-of-the-box Python 3.9.2, but ideally use something like [Pyenv](https://github.com/pyenv/pyenv).
+1. Install Raspberry PI OS 64-bit, Bullseye. I'm using out-of-the-box Python 3.9.2, but ideally use something like [Pyenv](https://github.com/pyenv/pyenv).
 2. Install paddlepaddle using the instructions [here](https://github.com/Qengineering/Paddle-Raspberry-Pi) I chose paddlepaddle-2.4.2-cp39-cp39-linux_aarch64.whl.
 3. Install paddleocr using ```pip install paddleocr```. I'm using 2.7.0 at the time of writing. Note you need to downgrade protobuf to 3.20.0 using ```pip install protobuf==3.20.0```.
 4. Install Picamera2 using ```sudo apt install -y python3-picamera2``` and you can access these libraries in Python using ```Python -m venv --system-site-packages anpr```
@@ -24,10 +24,11 @@ TODO: containerise this, but for now the installation process is cumberome and f
 6. Reinstall opencv. Paddle OCR required opencv 4.6.0, but that misses out on some new performance improvments. I installed 4.8 using Lindevs [pre-built wheel](https://lindevs.com/install-precompiled-opencv-on-raspberry-pi/) with no side effects.
 7. Coral AI USB accelerator installation instructions [here](https://coral.ai/docs/accelerator/get-started/#requirements)
 8. Install the Tensorflow Lite runtime with ```pip install tflite-runtime```
+9. ```pip install schedule```
 
 ## How it works
 
-Video is captured via the Pi camera. Basic object detection is performed using OpenCVs DNN (this is currently done on the CPU). Objection detection is executed on the Coral USB accelerator. If movement is detected and is a car, truck or motocycle, write an image to disk. Form a queue of image paths to be processed. In a seperate process, OCR the images to extract the number plate or text on the vehicle. Summarise the OCR results based on confidence and frequency, then write the OCR details to a sqlite database. Archive the images that have the highest OCR confidence.
+Video is captured via the Pi camera. Objection detection is executed on the Coral USB accelerator. If movement is detected and is a car, truck or motocycle, write an image to disk. Form a queue of image paths to be processed. In a seperate process, OCR the images to extract the number plate or text on the vehicle. Summarise the OCR results based on confidence and frequency, then write the OCR details to a sqlite database. Archive the images that have the highest OCR confidence.
 
 IN PROGRESS:
 - Build an API onto the data to get a frequency analysis of plates in a given time period

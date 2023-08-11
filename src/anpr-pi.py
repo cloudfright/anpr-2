@@ -6,12 +6,14 @@ from detect_tpu import TpuObjectDetector
 from multiprocessing.pool import ThreadPool
 from platereader import PlateReader
 from picamera2 import Picamera2
+from data_retention import DataRetentionPolicy
 
 import datetime
 
 if __name__ == '__main__':
 
     logging.getLogger().setLevel(logging.DEBUG)
+    scheduler = DataRetentionPolicy()
     picam2 = Picamera2()
 
     prev_frame_time = 0
@@ -64,7 +66,9 @@ if __name__ == '__main__':
             prev_frame_time = new_frame_time
             fps = int(fps)  
             fps = str(fps)
-  
+
+            scheduler.run_data_retention_policy()
+
             # print(fps)
                 # cv2.putText(frame, fps, (7, 70), cv2.FONT_HERSHEY_SIMPLEX, 3, (100, 255, 0), 3, cv2.LINE_AA)
                 # cv2.imshow('frame', frame)
