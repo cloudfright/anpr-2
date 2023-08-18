@@ -24,7 +24,7 @@ class EventPersistence:
     def record_event(self, timestamp, img_filename, ocr_result):
         try:
             ts = round(timestamp * 1000)
-            self.cursor.execute(f"INSERT INTO {EventPersistence.EVENTS_TABLE} VALUES ({ts}, {img_filename}, {ocr_result});")
+            self.cursor.execute("INSERT INTO events VALUES (?, ?, ?);", (ts, img_filename, ocr_result))
             self.conn.commit()
         except Exception as e:
             logging.critical(f"Error inserting event - {e}")

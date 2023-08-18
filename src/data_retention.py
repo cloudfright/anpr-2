@@ -11,9 +11,9 @@ class DataRetentionPolicy(object):
     ARCHIVED_IMAGES_RETENTION_DAYS = 30
 
     def __init__(self):
-        logging.getLogger().setLevel(logging.INFO)
+        logging.getLogger().setLevel(logging.DEBUG)
         logging.info("Data retention policy scheduler initialized.")
-        schedule.every().day.at("05:00").do(self.__cleanup_images)
+        schedule.every().day.at("10:00").do(self.__cleanup_images)
        
     def __cleanup_images(self):
         logging.info("Checking for images to delete...")
